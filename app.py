@@ -16,12 +16,8 @@ class SampleListener(Leap.Listener):
         self.rpos = None
         print "Connected"
 
-    def getgest(self):
-        return self.gest
-
     def on_frame(self, controller):
         frame = controller.frame()
-        self.gest = [0,0,0,0]
         if len(frame.hands) ==2:
             hands = frame.hands
             # print "Frame id: %d, timestamp: %d, hands: %d, fingers: %d" % (
@@ -48,19 +44,21 @@ class SampleListener(Leap.Listener):
         self.lpos = lhand.palm_position
             # print "Right hand: " + str(rpos)
             # print "Left hand: "+ str(lpos)
+        tempgest = [0,0,0,0]
         if self.rvelo[1] < -800:
             if self.rpos[2] > 0:
-                self.gest[2] = 1
+                tempgest[2] = 1
                 # print "Top Right Hit!"
             else:
-                self.gest[3] = 1
+                tempgest[3] = 1
                 #print "Down Right Hit!"
         if self.lvelo[1] < -800:
             if self.lpos[2] > 0:
-                self.gest[0] = 1
+                tempgest[0] = 1
             else:
-                self.gest[1] = 1
-
+                tempgest[1] = 1
+        
+        self.gest = tempgest
         self.f.write(str(self.lvelo[0])+","+str(self.lvelo[1])+","+str(self.lvelo[2])+","+str(self.lpos[0])+","+str(self.lpos[1])+","+str(self.lpos[2])+","+'\n')
 
 

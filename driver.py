@@ -88,7 +88,7 @@ class AirDrum(object):
 				if sum(self.action) != 0:
 					self.queue.append(self.action)
 					print "Add Action"
-					time.sleep(0.1)
+					# time.sleep(0.1)
 			except:
 				print "Failed to get gest"
 
