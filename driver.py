@@ -23,6 +23,7 @@ class AirDrum(object):
 		drum3 = AudioSegment.from_wav("audio/kick.wav")
 		drum4 = AudioSegment.from_wav("audio/hat.wav")
 		return drum1,drum2,drum3, drum4
+
 	def plays(self,drum, lens,trigger, db = 0):
 		if trigger:
 			if lens != -1:
@@ -88,6 +89,7 @@ class AirDrum(object):
 				if sum(self.action) != 0:
 					self.queue.append(self.action)
 					print "Add Action"
+					print self.action 
 					# time.sleep(0.1)
 			except:
 				print "Failed to get gest"
@@ -98,28 +100,35 @@ class AirDrum(object):
 		# tmain=Thread(target = stream.main)
 		# tmain.start()
 
-		drum1,drum2, drum3, drum4 = self.gesound()
+		drum1,drum2,drum3, drum4 = self.gesound()
 		# pygame.init()
 
 		#t5 = Thread(target = self.plays, args=(drum4, 400,self.action[3], +5,))
-
 		while True:
 			#start = time.time()
 			if self.queue:
 				tempact = self.queue.pop(0)
 			#print a,s,k,l
-				t1=Thread(target = self.plays, args=(drum1,600,tempact[0],+5,))
-				t2 = Thread(target = self.plays, args=(drum2,400,tempact[1],+25))
-				t3=Thread(target = self.plays, args=(drum3, 500,tempact[2], +35,))
-				t4 = Thread(target = self.plays, args=(drum4, 400,tempact[3], +5,))
+				if tempact[0] == 1:
+					t1=Thread(target = self.plays, args=(drum1,600,tempact[0],+5,))
+					t1.start()
+				if tempact[1] == 1:
+					t2 = Thread(target = self.plays, args=(drum2,400,tempact[1],+25))
+					t2.start()
+				if tempact[2] == 1:
+					t3=Thread(target = self.plays, args=(drum3, 500,tempact[2], +35,))
+					t3.start()
+				if tempact[3] == 1:
+					t4 = Thread(target = self.plays, args=(drum4, 400,tempact[3], +5,))
+					t4.start()
 				# t1.setDaemon(True)
 				# t2.setDaemon(True)
 				# t3.setDaemon(True)
 				# t4.setDaemon(True)
-				t1.start()
-				t2.start()
-				t3.start()
-				t4.start()
+				
+				
+				
+				
 			#print time.time() - start
 			# self.listener.setgest()
 			# time.sleep(0.1)

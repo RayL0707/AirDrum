@@ -31,7 +31,7 @@ class SampleListener(Leap.Listener):
             hands = frame.hands
         else:
             print "Place your two hand here for monitoring"
-            time.sleep(0.2)
+            time.sleep(0.02)
             return
 
         rfrontfin = rhand.fingers.frontmost
