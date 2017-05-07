@@ -1,6 +1,7 @@
 from pydub import AudioSegment
 import time
 from pydub.playback import play
+import boto3
 import sys
 sys.path.insert(0, "LeapSDK/lib")
 import Leap
@@ -16,6 +17,8 @@ class AirDrum(object):
 		self.flag =[0,0,0,0]
 		self.action = [0, 0, 0, 0]
 		self.queue = []
+		sqs = boto3.resource('sqs')
+        self.q = sqs.get_queue_by_name(QueueName='#######')
 
 	def gesound(self):
 		drum1 = AudioSegment.from_wav("audio/snare.wav")
@@ -89,29 +92,31 @@ class AirDrum(object):
 					self.getAction(i, va)
 				if sum(self.action) != 0:
 					self.queue.append(self.action)
+					action_json = json.dumps(self.action)
+					self.q.send_message(MessageBody=action_json)
 					print "Add Action"
 					print "t",time.time() - start
 					# time.sleep(0.1)
 			except:
 				print "Failed to get gest"
 
-	def getSync(self):
-		self.controller.add_listener(self.listener)
-		time.sleep(1)
-		while True:
-			#starts = self.get_pygame_events()
-			#a,s,k,l = self.keyreturn(starts)
-			# print str(self.listener.gest)
-			try:
-				for i, va in enumerate(self.listener.gest):
-					self.getAction(i, va)
-				if sum(self.action) != 0:
-					self.queue.append(self.action)
-					print "Add Action"
-					print self.action
-					# time.sleep(0.1)
-			except:
-				print "Failed to get gest"
+	# def getSync(self):
+	# 	self.controller.add_listener(self.listener)
+	# 	time.sleep(1)
+	# 	while True:
+	# 		#starts = self.get_pygame_events()
+	# 		#a,s,k,l = self.keyreturn(starts)
+	# 		# print str(self.listener.gest)
+	# 		try:
+	# 			for i, va in enumerate(self.listener.gest):
+	# 				self.getAction(i, va)
+	# 			if sum(self.action) != 0:
+	# 				self.queue.append(self.action)
+	# 				print "Add Action"
+	# 				print self.action
+	# 				# time.sleep(0.1)
+	# 		except:
+	# 			print "Failed to get gest"
 
 	def main(self):
 		ct = 0.5
