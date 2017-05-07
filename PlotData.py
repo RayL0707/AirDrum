@@ -13,7 +13,7 @@ def getplot(data):
 	xl = np.arange(0,len(data))
 
 	#for i in range(3):
-	plt.plot(xl,data[:,1].ravel(),label ='Velocity '+str(i))
+	plt.plot(xl,data[:,1].ravel(),label ='Velocity '+str(1))
 	plt.title("V vs.t")
 	plt.xlabel("time")
 	plt.ylabel("speed")
