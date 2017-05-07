@@ -46,14 +46,14 @@ class SampleListener(Leap.Listener):
             # print "Right hand: " + str(rpos)
             # print "Left hand: "+ str(lpos)
         tempgest = [0,0,0,0]
-        if self.rvelo[1] < -800:
+        if self.rvelo[1] < -600:
             if self.rpos[2] > 0:
                 tempgest[2] = 1
                 # print "Top Right Hit!"
             else:
                 tempgest[3] = 1
                 #print "Down Right Hit!"
-        if self.lvelo[1] < -800:
+        if self.lvelo[1] < -600:
             if self.lpos[2] > 0:
                 tempgest[0] = 1
             else:
