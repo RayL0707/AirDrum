@@ -6,12 +6,13 @@ sys.path.insert(0, "LeapSDK/lib")
 import Leap
 import time
 from threading import Thread
-from app import SampleListener
+from DrumListener import DrumListener
+#from AirPiano import AirPiano
 
 class AirDrum(object):
 	def __init__(self):
 		self.output = None
-		self.listener = SampleListener()
+		self.listener = DrumListener()
 		self.controller = Leap.Controller()
 		self.flag =[0,0,0,0]
 		self.action = [0, 0, 0, 0]
@@ -38,14 +39,8 @@ class AirDrum(object):
 				self.output += sound
 			pass
 
-	def get_pygame_events(self):
-		pygame.init()
-		pygame_events = pygame.event.get()
-		return pygame_events
-		pass
-
 	def getoutput(self):
-		file_handle = self.output.export("/data/output.wav", format="wav")
+		file_handle = self.output.export("/data/drum.wav", format="wav")
 		pass
 
 
@@ -95,40 +90,16 @@ class AirDrum(object):
 			except:
 				print "Failed to get gest"
 
-	def getSync(self):
-		self.controller.add_listener(self.listener)
-		time.sleep(1)
-		while True:
-			#starts = self.get_pygame_events()
-			#a,s,k,l = self.keyreturn(starts)
-			# print str(self.listener.gest)
-			try:
-				for i, va in enumerate(self.listener.gest):
-					self.getAction(i, va)
-				if sum(self.action) != 0:
-					self.queue.append(self.action)
-					print "Add Action"
-					print self.action
-					# time.sleep(0.1)
-			except:
-				print "Failed to get gest"
-
 	def main(self):
 		ct = 0.5
 		self.output = None
-		# tmain=Thread(target = stream.main)
-		# tmain.start()
-
 		drum1,drum2,drum3, drum4 = self.gesound()
-		# pygame.init()
-
-		#t5 = Thread(target = self.plays, args=(drum4, 400,self.action[3], +5,))
 		while True:
 			#start = time.time()
 			if self.queue:
 				print len(self.queue)
 				tempact = self.queue.pop(0)
-			#print a,s,k,l
+
 				if tempact[0] == 1:
 					t1=Thread(target = self.plays, args=(drum1,600,tempact[0],+5,))
 					t1.start()
@@ -156,16 +127,19 @@ class AirDrum(object):
 
 if __name__ == "__main__":
 	d = AirDrum()
+	#p = AirPiano()
 	try:
-		t1 = Thread(target=d.main)
-		t2 = Thread(target=d.getaction)
-		t1.daemon = True
-		t2.daemon = True
-		t1.start()
-		t2.start()
-		while t1.isAlive() and t2.isAlive():
-			t1.join(1)
-			t2.join(1)
+		t_Drum = Thread(target=d.main)
+		#t_Piano = Thread(target=p.main)
+		t_Drum_Action = Thread(target=d.getaction)
+		t_Drum.daemon = True
+		#t_Piano.daemon = True
+		t_Drum_Action.daemon = True
+		t_Drum.start()
+		#t_Piano.start()
+		while t_Drum.isAlive() and t_Drum_Action.isAlive():
+			t_Drum.join(1)
+			t_Drum_Action.join(1)
 	except KeyboardInterrupt:
 		#d.getoutput()
 		d.controller.remove_listener(d.listener)
