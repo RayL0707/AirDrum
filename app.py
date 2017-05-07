@@ -14,6 +14,7 @@ class SampleListener(Leap.Listener):
         self.lvelo = None
         self.lpos = None
         self.rpos = None
+        self.mod = 0
         print "Connected"
 
     def on_frame(self, controller):
@@ -57,7 +58,12 @@ class SampleListener(Leap.Listener):
                 tempgest[0] = 1
             else:
                 tempgest[1] = 1
-        
+
+        if self.lvelo[0] < -1000:
+            self.mod = 1
+        else:
+            self.mod = 0
+
         self.gest = tempgest
         self.f.write(str(self.lvelo[0])+","+str(self.lvelo[1])+","+str(self.lvelo[2])+","+str(self.lpos[0])+","+str(self.lpos[1])+","+str(self.lpos[2])+","+'\n')
 
