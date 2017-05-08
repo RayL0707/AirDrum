@@ -1,4 +1,6 @@
-
+backup/
+venv/
+piano.py
 data.csv
 LEAPSDK/
 *.pyc
