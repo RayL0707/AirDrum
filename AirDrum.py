@@ -1,10 +1,9 @@
 from pydub import AudioSegment
-import time
+import time,os
 from pydub.playback import play
 import sys
 sys.path.insert(0, "LeapSDK/lib")
 import Leap
-import time
 from threading import Thread
 from DrumListener import DrumListener
 
@@ -39,7 +38,20 @@ class AirDrum(object):
 			pass
 
 	def getoutput(self):
-		file_handle = self.output.export("/data/drum.wav", format="wav")
+		i=0
+		check = 0
+		filename="drum"
+		if os.path.exists(filename):
+			i=1
+			check=1
+		while os.path.exists("filename%s" %i):
+			i+=1
+		if check==0:
+			nfilename=filename
+		else:
+			nfilename=filename+str(i)
+		file_handle = self.output.export(nfilename+".wav", format="wav")
+		print "Drum Creation Saved."
 		pass
 
 	def getAction(self, i, va):
@@ -67,7 +79,7 @@ class AirDrum(object):
 				for i, va in enumerate(self.listener.gest):
 					self.getAction(i, va)
 				if sum(self.action) != 0:
-					print self.action
+					#print self.action
 					self.queue.append(self.action)
 					print "Add Action"
 					# print "t",time.time() - start

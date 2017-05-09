@@ -1,4 +1,4 @@
-import sys
+import sys,os
 sys.path.insert(0, "LeapSDK/lib")
 import Leap
 import time
@@ -14,7 +14,9 @@ class DrumListener(Leap.Listener):
         self.lvelo = None
         self.lpos = None
         self.rpos = None
+        self.switch = False
         print "Connected"
+        print "Drum Mode"
 
     def on_frame(self, controller):
         frame = controller.frame()
@@ -28,10 +30,12 @@ class DrumListener(Leap.Listener):
                 rhand = hands[0]
             hands = frame.hands
         else:
-            print "Place your two hand here for monitoring"
+            #print "Place your two hand here for monitoring"
             time.sleep(0.02)
             return
-
+        if lhand.palm_velocity[0] > 1000:
+            self.switch = True
+            return
         rfrontfin = rhand.fingers.frontmost
         lfrontfin = lhand.fingers.frontmost
         self.rvelo = rfrontfin.tip_velocity

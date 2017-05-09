@@ -1,6 +1,9 @@
 backup/
 venv/
+plots/
 piano.py
 data.csv
+piano.csv
+PlotData.py
 LEAPSDK/
 *.pyc

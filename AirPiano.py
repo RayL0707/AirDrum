@@ -1,10 +1,9 @@
 from pydub import AudioSegment
-import time
+import time,os
 from pydub.playback import play
 import sys
 sys.path.insert(0, "LeapSDK/lib")
 import Leap
-import time
 from threading import Thread
 from PianoListener import PianoListener
 
@@ -40,7 +39,20 @@ class AirPiano(object):
 			pass
 
 	def getoutput(self):
-		file_handle = self.output.export("/data/piano.wav", format="wav")
+		i=0
+		check = 0
+		filename="piano"
+		if os.path.exists(filename):
+			i=1
+			check=1
+		while os.path.exists("filename%s.txt" %i):
+			i+=1
+		if check==0:
+			nfilename=filename
+		else:
+			nfilename=filename+str(i)
+		file_handle = self.output.export(nfilename+".wav", format="wav")
+		print "Piano Creation Saved."
 		pass
 
 	def getAction(self, i, va):
@@ -80,7 +92,7 @@ class AirPiano(object):
 				tempact = self.queue.pop(0)
 				for j in range(8):
 					if tempact[j] == 1:
-						t_piano[j]=Thread(target = self.plays, args=(keys[j],tempact[j],))
+						t_piano[j]=Thread(target = self.plays, args=(keys[j],tempact[j],25))
 						t_piano[j].start()
 
 if __name__ == "__main__":
