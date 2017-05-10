@@ -6,7 +6,7 @@ sys.path.insert(0, "LeapSDK/lib")
 import Leap
 from threading import Thread
 from PianoListener import PianoListener
-
+from uploaddata import UploadFile
 class AirPiano(object):
 	def __init__(self):
 		self.output = None
@@ -42,17 +42,21 @@ class AirPiano(object):
 		i=0
 		check = 0
 		filename="piano"
-		if os.path.exists(filename):
+		if os.path.exists(filename +".wav"):
 			i=1
 			check=1
-		while os.path.exists("filename%s.txt" %i):
+		while os.path.exists(filename+str(i)+".wav"):
 			i+=1
 		if check==0:
 			nfilename=filename
 		else:
 			nfilename=filename+str(i)
-		file_handle = self.output.export(nfilename+".wav", format="wav")
-		print "Piano Creation Saved."
+		if self.output:
+			file_handle = self.output.export(nfilename+".wav", format="wav")
+			print "Piano Creation Saved."
+			u = UploadFile()
+			u.upload(nfilename+".wav")
+			print "Music File Uploaded."
 		pass
 
 	def getAction(self, i, va):

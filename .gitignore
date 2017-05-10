@@ -7,3 +7,6 @@ piano.csv
 PlotData.py
 LEAPSDK/
 *.pyc
+*.wav
+test.txt
+test1.py

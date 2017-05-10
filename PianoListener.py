@@ -12,6 +12,8 @@ class PianoListener(Leap.Listener):
         self.mod = 0
         self.switch = False
         self.f = open("piano.csv","w")
+        self.finger_weight = [1, 1, 1.1, 1.2, 2.1]
+        os.system('clear')
         print "Connected"
         print "Piano Mode"
 
@@ -37,9 +39,8 @@ class PianoListener(Leap.Listener):
         gest = [0,0,0,0,0]
         for i, finger in enumerate(fingers):
             cur_velo = finger.tip_velocity[1]
-            if i == 4:# little finger weight adjust
-                cur_velo *= 2.2
-            if cur_velo <-200 and abs(cur_velo) > maxvel:
+            cur_velo *= self.finger_weight[i]
+            if cur_velo <-150 and abs(cur_velo) > maxvel:
                 largefin = finger.type
         if largefin != -1:
             gest[int(largefin)] = 1
