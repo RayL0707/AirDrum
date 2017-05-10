@@ -26,7 +26,7 @@ if __name__ == "__main__":
 			t_Drum_Action.daemon = True
 			t_Drum.start()
 			t_Drum_Action.start()
-			print type(d.listener)
+			#print type(d.listener)
 			time.sleep(0.5)
 			while d.listener.switch == False and t_Drum.isAlive() and t_Drum_Action.isAlive():
 				#print "Drum Mode"
@@ -52,10 +52,14 @@ if __name__ == "__main__":
 			p.getoutput()
 			p.controller.remove_listener(p.listener)
 	except KeyboardInterrupt:
+		print "ending"
 		if curr_mode == 0:
+			#print "delete drumaklshjdjkashdjaksdhjaksdhjkahdjksahdkjashdjksahdkjasdhkjasdh"
+			print d.output,"aha"
 			d.getoutput()
+			d.controller.remove_listener(d.listener)
 		else:
+			print p.output,"aha"
 			p.getoutput()
-		p.controller.remove_listener(p.listener)
-		d.controller.remove_listener(d.listener)
+			p.controller.remove_listener(p.listener)
 		exit

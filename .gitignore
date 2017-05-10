@@ -8,3 +8,5 @@ PlotData.py
 LEAPSDK/
 *.pyc
 *.wav
+*.txt
+*.csv

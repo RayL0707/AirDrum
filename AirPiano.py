@@ -1,19 +1,19 @@
 from pydub import AudioSegment
-import time,os
+import time,os, csv
 from pydub.playback import play
-import sys
+import sys,heapq
 sys.path.insert(0, "LeapSDK/lib")
 import Leap
 from threading import Thread
 from PianoListener import PianoListener
-
+from uploaddata import UploadFile
 class AirPiano(object):
 	def __init__(self):
-		self.output = None
+		self.output = [[],[],[],[],[]]
 		self.listener = PianoListener()
 		self.controller = Leap.Controller()
 		self.flag =[0, 0, 0, 0, 0, 0, 0, 0]
-		self.action = [0, 0, 0, 0, 0, 0, 0, 0]
+		self.action = [0, 0, 0, 0, 0]
 		self.queue = []
 
 	def gesound(self):
@@ -27,33 +27,39 @@ class AirPiano(object):
 		doo = AudioSegment.from_wav("audio/hhh/8doo.wav")
 		return [do, re, mi, fa, so, la, ti, doo]
 
-	def plays(self,drum,trigger, db = 0):
+	def plays(self,drum,trigger, keytype, itype, db = 0):
 		if trigger:
 			sound = drum + db
 			play(sound)
 			#-----record------
-			if not self.output:
-				self.output = sound
-			else:
-				self.output += sound
 			pass
 
 	def getoutput(self):
 		i=0
 		check = 0
 		filename="piano"
-		if os.path.exists(filename):
+		if os.path.exists(filename + ".csv"):
 			i=1
 			check=1
-		while os.path.exists("filename%s.txt" %i):
+		while os.path.exists("filename%s.csv" %i):
 			i+=1
 		if check==0:
 			nfilename=filename
 		else:
 			nfilename=filename+str(i)
 		if self.output:
-			file_handle = self.output.export(nfilename+".wav", format="wav")
+			output = list(heapq.merge(self.output[0],self.output[1],self.output[2],self.output[3],self.output[4]))
+			f = open(nfilename + '.csv','wb')
+			wr = csv.writer(f,quoting=csv.QUOTE_ALL)
+			for row in output:
+				wr.writerow(row)
 			print "Piano Creation Saved."
+			#------ upload patch-----
+			f.close()
+			os.system('clear')
+			print "Uploading "+nfilename+ " to S3..."
+			u = UploadFile()
+			u.upload(nfilename + ".csv")
 		pass
 
 	def getAction(self, i, va):
@@ -86,7 +92,7 @@ class AirPiano(object):
 
 	def main(self):
 		ct = 0.5
-		self.output = None
+		#self.output = None
 		keys = self.gesound()
 		t_piano = [None for i in range(5)]
 		while True:
@@ -94,7 +100,8 @@ class AirPiano(object):
 				tempact = self.queue.pop(0)
 				for j in range(5):
 					if tempact[j] == 1:
-						t_piano[j]=Thread(target = self.plays, args=(keys[j],tempact[j],25))
+						self.output[j].append((time.time(), j, "p"))
+						t_piano[j]=Thread(target = self.plays, args=(keys[j],tempact[j], j,"p",25))
 						t_piano[j].start()
 
 if __name__ == "__main__":

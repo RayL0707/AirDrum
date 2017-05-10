@@ -1,15 +1,15 @@
 from pydub import AudioSegment
-import time,os
+import time,os,csv,heapq
 from pydub.playback import play
 import sys
 sys.path.insert(0, "LeapSDK/lib")
 import Leap
 from threading import Thread
 from DrumListener import DrumListener
-
+from uploaddata import UploadFile
 class AirDrum(object):
 	def __init__(self):
-		self.output = None
+		self.output = [[],[],[],[]]
 		self.listener = DrumListener()
 		self.controller = Leap.Controller()
 		self.flag =[0,0,0,0]
@@ -23,7 +23,7 @@ class AirDrum(object):
 		drum4 = AudioSegment.from_wav("audio/hat.wav")
 		return drum1,drum2,drum3, drum4
 
-	def plays(self,drum, lens,trigger, db = 0):
+	def plays(self,drum, lens,trigger, keytype, itype,db = 0):
 		if trigger:
 			if lens != -1:
 				sound = drum[:lens] + db
@@ -31,17 +31,14 @@ class AirDrum(object):
 				sound = drum + db
 			play(sound)
 			#-----record------
-			if not self.output:
-				self.output = sound
-			else:
-				self.output += sound
+			self.output[keytype].append((time.time(), keytype, itype))
 			pass
 
 	def getoutput(self):
 		i=0
 		check = 0
 		filename="drum"
-		if os.path.exists(filename):
+		if os.path.exists(filename + ".csv"):
 			i=1
 			check=1
 		while os.path.exists("filename%s" %i):
@@ -51,8 +48,19 @@ class AirDrum(object):
 		else:
 			nfilename=filename+str(i)
 		if self.output:
-			file_handle = self.output.export(nfilename+".wav", format="wav")
+			print "#########################################################################"
+			output = list(heapq.merge(self.output[0],self.output[1],self.output[2],self.output[3]))
+			f = open(nfilename + '.csv','wb')
+			wr = csv.writer(f,quoting=csv.QUOTE_ALL)
+			for row in output:
+				wr.writerow(row)
 			print "Drum Creation Saved."
+			#------ upload patch-----
+			f.close()
+			os.system('clear')
+			print "Uploading "+nfilename+ " to S3..."
+			u = UploadFile()
+			u.upload(nfilename + ".csv")
 		pass
 
 	def getAction(self, i, va):
@@ -90,7 +98,6 @@ class AirDrum(object):
 
 	def main(self):
 		ct = 0.5
-		self.output = None
 		drum1,drum2,drum3, drum4 = self.gesound()
 		while True:
 			#start = time.time()
@@ -99,16 +106,16 @@ class AirDrum(object):
 				tempact = self.queue.pop(0)
 				#print tempact
 				if tempact[0] == 1:
-					t1=Thread(target = self.plays, args=(drum1,600,tempact[0],+5,))
+					t1=Thread(target = self.plays, args=(drum1,600,tempact[0],0,"d",+5))
 					t1.start()
 				if tempact[1] == 1:
-					t2 = Thread(target = self.plays, args=(drum2,400,tempact[1],+15))
+					t2 = Thread(target = self.plays, args=(drum2,400,tempact[1],1,"d",+15))
 					t2.start()
 				if tempact[2] == 1:
-					t3=Thread(target = self.plays, args=(drum3, 500,tempact[2], +25,))
+					t3=Thread(target = self.plays, args=(drum3, 500,tempact[2],2,"d", +25))
 					t3.start()
 				if tempact[3] == 1:
-					t4 = Thread(target = self.plays, args=(drum4, 400,tempact[3], +15,))
+					t4 = Thread(target = self.plays, args=(drum4, 400,tempact[3],3,"d", +15))
 					t4.start()
 
 if __name__ == "__main__":

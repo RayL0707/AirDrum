@@ -11,7 +11,7 @@ class PianoListener(Leap.Listener):
         self.gest = [0,0,0,0,0]
         self.mod = 0
         self.switch = False
-        self.f = open("piano.csv","w")
+        # self.f = open("piano.csv","w")
         os.system('clear')
         print "Connected"
         print "Piano Mode"
@@ -46,7 +46,7 @@ class PianoListener(Leap.Listener):
         if largefin != -1:
             gest[int(largefin)] = 1
         self.gest = gest
-        self.f.write(str(fingers[0].tip_velocity[1])+","+str(fingers[1].tip_velocity[1])+","+str(fingers[2].tip_velocity[1])+","+str(fingers[3].tip_velocity[1])+","+str(fingers[4].tip_velocity[1])+","+'\n')
+        #self.f.write(str(fingers[0].tip_velocity[1])+","+str(fingers[1].tip_velocity[1])+","+str(fingers[2].tip_velocity[1])+","+str(fingers[3].tip_velocity[1])+","+str(fingers[4].tip_velocity[1])+","+'\n')
         # self.thumbvel = thumb.tip_velocity
         # self.indexvel = index.tip_velocity
         # self.middlevel = middle.tip_velocity

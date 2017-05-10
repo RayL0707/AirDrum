@@ -9,7 +9,7 @@ class DrumListener(Leap.Listener):
 
     def on_connect(self, controller):
         self.gest = [0,0,0,0]
-        self.f = open("data.csv","w")
+        # self.f = open("data.csv","w")
         self.rvelo = None
         self.lvelo = None
         self.lpos = None
@@ -63,7 +63,7 @@ class DrumListener(Leap.Listener):
 
         self.gest = tempgest
 
-        self.f.write(str(self.lvelo[0])+","+str(self.lvelo[1])+","+str(self.lvelo[2])+","+str(self.lpos[0])+","+str(self.lpos[1])+","+str(self.lpos[2])+","+'\n')
+        #self.f.write(str(self.lvelo[0])+","+str(self.lvelo[1])+","+str(self.lvelo[2])+","+str(self.lpos[0])+","+str(self.lpos[1])+","+str(self.lpos[2])+","+'\n')
 
 
 if __name__ == "__main__":
