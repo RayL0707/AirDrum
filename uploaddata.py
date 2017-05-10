@@ -20,3 +20,4 @@ class UploadFile(object):
         self.initialize()
         bucketname = 'AirDrum'
         self.s3.upload_file(filename, bucketname, filename)
+        print "Music File Uploaded."

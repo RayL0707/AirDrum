@@ -55,8 +55,7 @@ class AirPiano(object):
 			file_handle = self.output.export(nfilename+".wav", format="wav")
 			print "Piano Creation Saved."
 			u = UploadFile()
-			u.upload(nfilename+".wav")
-			print "Music File Uploaded."
+			#u.upload(nfilename+".wav")
 		pass
 
 	def getAction(self, i, va):

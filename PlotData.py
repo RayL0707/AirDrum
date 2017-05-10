@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 # hand_slow = np.array(pd.read_csv("finger_fast.csv",header = None))
 raw_data = np.array(pd.read_csv("piano.csv",header = None))
 #print raw_data[:3]
-print raw_data
+#print raw_data
 def getplot(data):
 	x = np.arange(0,len(data))
 
@@ -19,8 +19,11 @@ def getplot(data):
 	# 	plt.ylabel("speed")
 	# 	plt.legend(loc=0)
 	f, axarr = plt.subplots(5)
-	for i in range(data.shape[1]):
-		axarr[i].plot(x, data[:,i].ravel())
+	finger_weight = [1.5, 1, 1.1, 1.0, 2.1]
+	finger_weight0 = [1, 1, 1, 1, 1]
+	for i in range(data.shape[1]-1):
+		axarr[i].plot(x, data[:,i] / finger_weight0[i])
+		axarr[i].set_ylim(0,1000)
 		axarr[i].set_title('Finger '+str(i + 1))
 		plt.subplots_adjust(hspace = 0.5)
 	plt.show()

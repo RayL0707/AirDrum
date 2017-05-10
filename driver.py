@@ -26,7 +26,7 @@ class driver(object):
 				t_Drum.start()
 				t_Drum_Action.start()
 				#print type(d.listener)
-				time.sleep(0.5)
+				time.sleep(0.1)
 				while d.listener.switch == False and t_Drum.isAlive() and t_Drum_Action.isAlive():
 					#print "Drum Mode"
 					t_Drum.join(1)
@@ -43,7 +43,7 @@ class driver(object):
 				t_Piano_Action.daemon = True
 				t_Piano.start()
 				t_Piano_Action.start()
-				time.sleep(0.5)
+				time.sleep(0.1)
 				#print "Piano Mode"
 				while p.listener.switch == False and t_Piano.isAlive() and t_Piano_Action.isAlive():
 					t_Piano.join(1)
