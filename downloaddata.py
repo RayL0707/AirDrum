@@ -16,4 +16,6 @@ class DownloadFile(object):
     
     def download(self, filename):
         bucketname = 'AirDrum'
+        for element in s3.list_objects(Bucket=bucketname)['Contents']:
+            print element['Key']
         self.s3.download_file('AirDrum', 'Saturday.csv', '1.csv')
