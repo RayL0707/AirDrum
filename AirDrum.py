@@ -41,7 +41,7 @@ class AirDrum(object):
 		if os.path.exists(filename + ".csv"):
 			i=1
 			check=1
-		while os.path.exists("filename%s" %i):
+		while os.path.exists(filename + str(i) + ".csv"):
 			i+=1
 		if check==0:
 			nfilename=filename
