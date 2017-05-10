@@ -12,7 +12,7 @@ class PianoListener(Leap.Listener):
         self.mod = 0
         self.switch = False
         self.f = open("piano.csv","w")
-        self.finger_weight = [1.5, 1, 1.6, 1.5, 2.2]
+        self.finger_weight = [1.5, 1, 1.6, 1.6, 2.1]
         self.finger_weight1 = [1, 1, 1, 1, 1]
         os.system('clear')
         print "Connected"
@@ -43,10 +43,10 @@ class PianoListener(Leap.Listener):
         line = [0,0,0,0,0]
         for i, finger in enumerate(fingers):
             #velocity check
-            #cur_velo = math.sqrt(finger.tip_velocity[0] ** 2 + finger.tip_velocity[1] ** 2 + finger.tip_velocity[2] ** 2) if finger.tip_velocity[1] < 0 else -1
-            cur_velo = finger.tip_velocity[1]
+            cur_velo = math.sqrt(finger.tip_velocity[0] ** 2 + finger.tip_velocity[1] ** 2 + finger.tip_velocity[2] ** 2) if finger.tip_velocity[1] < 0 else -1
+            #cur_velo = finger.tip_velocity[1]
             cur_velo *= self.finger_weight[finger.type]
-            if cur_velo < -160 and abs(cur_velo) > maxvel:
+            if cur_velo > 180 and abs(cur_velo) > maxvel:
                 largefin = finger.type
                 maxvel = cur_velo
             line[finger.type] = str(cur_velo)

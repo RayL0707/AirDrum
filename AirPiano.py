@@ -29,7 +29,7 @@ class AirPiano(object):
 
 	def plays(self,drum,trigger, db = 0):
 		if trigger:
-			sound = drum + db
+			sound = drum[:400] + db
 			play(sound)
 			#-----record------
 			if not self.output:
@@ -53,9 +53,9 @@ class AirPiano(object):
 			nfilename=filename+str(i)
 		if self.output:
 			file_handle = self.output.export(nfilename+".wav", format="wav")
-			print "Piano Creation Saved. Uploading to S3..."
-			u = UploadFile()
-			u.upload(nfilename+".wav")
+			#print "Piano Creation Saved. Uploading "+nfilename+ " to S3..."
+			#u = UploadFile()
+			#u.upload(nfilename+".wav")
 		pass
 
 	def getAction(self, i, va):
@@ -93,6 +93,7 @@ class AirPiano(object):
 		while True:
 			if self.queue:
 				tempact = self.queue.pop(0)
+				print tempact
 				for j in range(8):
 					if tempact[j] == 1:
 						t_piano[j]=Thread(target = self.plays, args=(keys[j],tempact[j],25))
