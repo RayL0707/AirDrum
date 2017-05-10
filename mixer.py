@@ -12,7 +12,7 @@ from threading import Thread
 # for el in res:
 # 	wr.writerow(el)
 class Mixer(object):
-	def __init(self,file):
+	def __init__(self,file):
 		self.file = file
 		self.keys = []
 		self.drums = []
@@ -44,12 +44,12 @@ class Mixer(object):
 		play(sound)
 		pass
 
-	def mixer(self, drums):
+	def mixer(self):
 		self.getd()
 		self.getp()
 		t_pianos = [0 for i in range(5)]
 		t_drums = [0 for i in range(4)]
-		with open('piano1.csv', 'rb') as f:
+		with open(self.file, 'rb') as f:
 			reader = csv.reader(f)
 			record = list(reader)
 		#nd = 0
@@ -64,9 +64,21 @@ class Mixer(object):
 					t_pianos[j]=Thread(target = self.plays, args=(self.keys[j],j,"p",-1,25))
 					t_pianos[j].start()
 				elif tempact[2] == "d":
-					print "hi"
-					t_drums[j]=Thread(target = self.plays, args=(self.drums[j],j,"d",-1,25))
-					t_drums[j].start()
+					#print "hi"
+					# t_drums[j]=Thread(target = self.plays, args=(self.drums[j],j,"d",-1,25))
+					# t_drums[j].start()
+					if j == 0:
+						t_drums[j]=Thread(target = self.plays, args=(self.drums[j],j,"d",600,5))
+						t_drums[j].start()
+					elif j == 1:
+						t_drums[j] = Thread(target = self.plays, args=(self.drums[j],j,"d",400,15))
+						t_drums[j].start()
+					elif j == 2:
+						t_drums[j]=Thread(target = self.plays, args=(self.drums[j],j,"d",500,25))
+						t_drums[j].start()
+					elif j == 3:
+						t_drums[j] = Thread(target = self.plays, args=(self.drums[j],j,"d",400,15))
+						t_drums[j].start()
 				#ind += 1
 			else:
 				break
@@ -75,5 +87,5 @@ class Mixer(object):
 
 if __name__ == '__main__':
 	print time.time()
-	test = Mixer()
-	test.mixer('piano1.csv')
+	test = Mixer('piano1.csv')
+	test.mixer()

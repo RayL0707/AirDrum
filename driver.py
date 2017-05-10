@@ -55,11 +55,11 @@ if __name__ == "__main__":
 		print "ending"
 		if curr_mode == 0:
 			#print "delete drumaklshjdjkashdjaksdhjaksdhjkahdjksahdkjashdjksahdkjasdhkjasdh"
-			print d.output,"aha"
+			#print d.output,"aha"
 			d.getoutput()
 			d.controller.remove_listener(d.listener)
 		else:
-			print p.output,"aha"
+			#print p.output,"aha"
 			p.getoutput()
 			p.controller.remove_listener(p.listener)
 		exit

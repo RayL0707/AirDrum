@@ -22,48 +22,40 @@ class DownloadFile(object):
 
     def menu(self):
         self.initialize()
+        time.sleep(1)
         os.system('clear')
         bucketname = 'AirDrum'
         ind = 1
-        pulls = self.s3.list_objects(Bucket=bucketname)['Contents']
+        try:
+            pulls = self.s3.list_objects(Bucket=bucketname)['Contents']
+        except:
+            qt = raw_input("There is no file on cloud.")
+            time.sleep(1)
+            raise KeyboardInterrupt
         filenames = ["" for i in range(len(pulls))]
         for element in pulls:
             print ind,element['Key']
             filenames[ind - 1] = element['Key']
             ind += 1
         picked = raw_input("pick the file number you want to select:")
-        fname = filenames[int(picked) - 1]
+        try:
+            fname = filenames[int(picked) - 1]
+        except:
+            print "no such file."
+            time.sleep(1)
+            return
         self.s3.download_file('AirDrum', fname, fname)
         print "Downloaded."
         self.playit(fname)
         time.sleep(1)
     def playit(self,file):
+        os.system('clear')
         "Playing..."
-        self.mixer(file)
+        playing = Mixer(file)
+        playing.mixer()
         os.system('clear')
         print "Done."
         pass
-    def getd(self):
-        drum1 = AudioSegment.from_wav("audio/snare.wav")
-        drum2 = AudioSegment.from_wav("audio/cymbals.wav")
-        drum3 = AudioSegment.from_wav("audio/kick.wav")
-        drum4 = AudioSegment.from_wav("audio/hat.wav")
-        return [drum1,drum2,drum3, drum4]
-
-    def getp(self):
-        do = AudioSegment.from_mp3("audio/hhh/1do.mp3")
-        re = AudioSegment.from_mp3("audio/hhh/2re.mp3")
-        mi = AudioSegment.from_mp3("audio/hhh/3mi.mp3")
-        fa = AudioSegment.from_mp3("audio/hhh/4fa.mp3")
-        so = AudioSegment.from_mp3("audio/hhh/5so.mp3")
-        la = AudioSegment.from_mp3("audio/hhh/6la.mp3")
-        ti = AudioSegment.from_mp3("audio/hhh/7ti.mp3")
-        doo = AudioSegment.from_wav("audio/hhh/8doo.wav")
-        return [do, re, mi, fa, so, la, ti, doo]
-    def mixer(self, keys, drums, file):
-        drums = self.getd()
-        keys = self.getp()
-        #------process file-----
 
         pass
 sys.path.insert(0, "LeapSDK/lib")
