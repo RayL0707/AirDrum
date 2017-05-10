@@ -12,7 +12,7 @@ class PianoListener(Leap.Listener):
         self.mod = 0
         self.switch = False
         self.f = open("piano.csv","w")
-        self.finger_weight = [1.5, 1, 1.6, 1.7, 2.2]
+        self.finger_weight = [1.5, 1, 1.6, 1.5, 2.2]
         self.finger_weight1 = [1, 1, 1, 1, 1]
         os.system('clear')
         print "Connected"

@@ -53,9 +53,9 @@ class AirPiano(object):
 			nfilename=filename+str(i)
 		if self.output:
 			file_handle = self.output.export(nfilename+".wav", format="wav")
-			print "Piano Creation Saved."
+			print "Piano Creation Saved. Uploading to S3..."
 			u = UploadFile()
-			#u.upload(nfilename+".wav")
+			u.upload(nfilename+".wav")
 		pass
 
 	def getAction(self, i, va):
