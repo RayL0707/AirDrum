@@ -12,6 +12,7 @@ class PianoListener(Leap.Listener):
         self.mod = 0
         self.switch = False
         self.f = open("piano.csv","w")
+        os.system('clear')
         print "Connected"
         print "Piano Mode"
 

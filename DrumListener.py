@@ -15,6 +15,7 @@ class DrumListener(Leap.Listener):
         self.lpos = None
         self.rpos = None
         self.switch = False
+        os.system('clear')
         print "Connected"
         print "Drum Mode"
 

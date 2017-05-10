@@ -50,8 +50,9 @@ class AirDrum(object):
 			nfilename=filename
 		else:
 			nfilename=filename+str(i)
-		file_handle = self.output.export(nfilename+".wav", format="wav")
-		print "Drum Creation Saved."
+		if self.output:
+			file_handle = self.output.export(nfilename+".wav", format="wav")
+			print "Drum Creation Saved."
 		pass
 
 	def getAction(self, i, va):

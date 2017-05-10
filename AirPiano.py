@@ -17,14 +17,14 @@ class AirPiano(object):
 		self.queue = []
 
 	def gesound(self):
-		do = AudioSegment.from_mp3("audio/piano/1do.mp3")
-		re = AudioSegment.from_mp3("audio/piano/2re.mp3")
-		mi = AudioSegment.from_mp3("audio/piano/3mi.mp3")
-		fa = AudioSegment.from_mp3("audio/piano/4fa.mp3")
-		so = AudioSegment.from_mp3("audio/piano/5so.mp3")
-		la = AudioSegment.from_mp3("audio/piano/6la.mp3")
-		ti = AudioSegment.from_mp3("audio/piano/7ti.mp3")
-		doo = AudioSegment.from_wav("audio/piano/8doo.wav")
+		do = AudioSegment.from_mp3("audio/hhh/1do.mp3")
+		re = AudioSegment.from_mp3("audio/hhh/2re.mp3")
+		mi = AudioSegment.from_mp3("audio/hhh/3mi.mp3")
+		fa = AudioSegment.from_mp3("audio/hhh/4fa.mp3")
+		so = AudioSegment.from_mp3("audio/hhh/5so.mp3")
+		la = AudioSegment.from_mp3("audio/hhh/6la.mp3")
+		ti = AudioSegment.from_mp3("audio/hhh/7ti.mp3")
+		doo = AudioSegment.from_wav("audio/hhh/8doo.wav")
 		return [do, re, mi, fa, so, la, ti, doo]
 
 	def plays(self,drum,trigger, db = 0):
@@ -51,8 +51,9 @@ class AirPiano(object):
 			nfilename=filename
 		else:
 			nfilename=filename+str(i)
-		file_handle = self.output.export(nfilename+".wav", format="wav")
-		print "Piano Creation Saved."
+		if self.output:
+			file_handle = self.output.export(nfilename+".wav", format="wav")
+			print "Piano Creation Saved."
 		pass
 
 	def getAction(self, i, va):
