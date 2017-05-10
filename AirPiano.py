@@ -78,6 +78,7 @@ class AirPiano(object):
 					self.getAction(i, va)
 				if sum(self.action) != 0:
 					self.queue.append(self.action)
+					print self.action
 					print "Add Action"
 			except:
 				print "Failed to get gest"
@@ -86,11 +87,11 @@ class AirPiano(object):
 		ct = 0.5
 		self.output = None
 		keys = self.gesound()
-		t_piano = [None for i in range(8)]
+		t_piano = [None for i in range(5)]
 		while True:
 			if self.queue:
 				tempact = self.queue.pop(0)
-				for j in range(8):
+				for j in range(5):
 					if tempact[j] == 1:
 						t_piano[j]=Thread(target = self.plays, args=(keys[j],tempact[j],25))
 						t_piano[j].start()

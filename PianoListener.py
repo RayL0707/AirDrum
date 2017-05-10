@@ -1,7 +1,7 @@
 import sys,os
 sys.path.insert(0, "LeapSDK/lib")
 import Leap
-import time
+import time, math
 
 
 
@@ -36,11 +36,12 @@ class PianoListener(Leap.Listener):
         maxvel = 0
         gest = [0,0,0,0,0]
         for i, finger in enumerate(fingers):
-            cur_velo = finger.tip_velocity[1]
-            if i == 4:# little finger weight adjust
-                cur_velo *= 2.2
-            if cur_velo <-200 and abs(cur_velo) > maxvel:
+            cur_velo = math.sqrt(finger.tip_velocity[0] ** 2 + finger.tip_velocity[1] ** 2 + finger.tip_velocity[2] ** 2) if finger.tip_velocity[1] < 0 else 0
+            if cur_velo > 175 and cur_velo > maxvel:
                 largefin = finger.type
+                maxvel = cur_velo
+
+
         if largefin != -1:
             gest[int(largefin)] = 1
         self.gest = gest
