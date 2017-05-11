@@ -1,5 +1,5 @@
 import boto3
-import json
+import json,time
 
 class UploadFile(object):
     def __init__(self):
@@ -20,4 +20,5 @@ class UploadFile(object):
         self.initialize()
         bucketname = 'AirDrum'
         self.s3.upload_file(filename, bucketname, filename)
-        print "Music File Uploaded."
+        print "\n Music File " + filename + " Uploaded."
+        time.sleep(1)

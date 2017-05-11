@@ -1,7 +1,11 @@
 import sys,os
 sys.path.insert(0, "LeapSDK/lib")
 import Leap
+<<<<<<< HEAD
 import time,math
+=======
+import time, math
+>>>>>>> Demobr
 
 
 
@@ -11,9 +15,7 @@ class PianoListener(Leap.Listener):
         self.gest = [0,0,0,0,0]
         self.mod = 0
         self.switch = False
-        self.f = open("piano.csv","w")
-        self.finger_weight = [1.5, 1, 1.6, 1.6, 2.1]
-        self.finger_weight1 = [1, 1, 1, 1, 1]
+        # self.f = open("piano.csv","w")
         os.system('clear')
         print "Connected"
         print "Piano Mode"
@@ -42,28 +44,16 @@ class PianoListener(Leap.Listener):
         #print calibrate_height
         line = [0,0,0,0,0]
         for i, finger in enumerate(fingers):
-            #velocity check
-            cur_velo = math.sqrt(finger.tip_velocity[0] ** 2 + finger.tip_velocity[1] ** 2 + finger.tip_velocity[2] ** 2) if finger.tip_velocity[1] < 0 else -1
-            #cur_velo = finger.tip_velocity[1]
-            cur_velo *= self.finger_weight[finger.type]
-            if cur_velo > 180 and abs(cur_velo) > maxvel:
+            cur_velo = math.sqrt(finger.tip_velocity[0] ** 2 + finger.tip_velocity[1] ** 2 + finger.tip_velocity[2] ** 2) if finger.tip_velocity[1] < 0 else 0
+            if cur_velo > 175 and cur_velo > maxvel:
                 largefin = finger.type
                 maxvel = cur_velo
-            line[finger.type] = str(cur_velo)
 
-            # position check
-            # cur_pos = finger.tip_position[1]
-            # pos_diff = abs(calibrate_height[1] - cur_pos) * self.finger_weight[finger.type]
-            # if pos_diff > maxvel:
-            #     largefin = finger.type
-            #     maxvel = pos_diff
-            # line[finger.type] = str(pos_diff)
 
-        res = ",".join(line)
         if largefin != -1:
             gest[int(largefin)] = 1
         self.gest = gest
-        self.f.write(res + "," + '\n')
+        #self.f.write(str(fingers[0].tip_velocity[1])+","+str(fingers[1].tip_velocity[1])+","+str(fingers[2].tip_velocity[1])+","+str(fingers[3].tip_velocity[1])+","+str(fingers[4].tip_velocity[1])+","+'\n')
         # self.thumbvel = thumb.tip_velocity
         # self.indexvel = index.tip_velocity
         # self.middlevel = middle.tip_velocity
